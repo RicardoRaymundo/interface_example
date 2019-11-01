@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:interface_example/content_page_a.dart';
 
 class Content extends StatefulWidget {
   @override
@@ -7,7 +8,7 @@ class Content extends StatefulWidget {
 }
 
 class _ContentState extends State<Content> {
-  PageController _pageController = PageController(initialPage: 0, keepPage: false);
+  PageController pageController = PageController(initialPage: 0, keepPage: false);
 
   List<Color> pagesColor = [
     Colors.blue,
@@ -25,11 +26,11 @@ class _ContentState extends State<Content> {
     return Wrap(
       direction: Axis.horizontal,
       spacing: 8.0,
-      children: pagesColor
+      children: this.pagesColor
           .map((color) =>
           RaisedButton(
             onPressed: () {
-              _pageController.jumpToPage(pagesColor.indexOf(color));
+              this.pageController.jumpToPage(pagesColor.indexOf(color));
             },
           ))
           .toList(),
@@ -42,40 +43,13 @@ class _ContentState extends State<Content> {
         child:
             //buildButtons(),
             PageView.builder(
-              controller: _pageController,
+              controller: this.pageController,
 
               /// Desabilita troca de pagina por scroll
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, position) {
-                return Container(
-                  color: pagesColor[position],
-                  child: Center(
-                    child: Row(
-                      children: <Widget>[
-                        RaisedButton(
-                          onPressed: () {
-                            _pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.ease);
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
-                          child: Icon(Icons.chevron_left),
-                        ),
-                        Spacer(),
-                        Text('Página: ' + (position+1).toString()),
-                        Spacer(),
-                        RaisedButton(
-                          onPressed: () {
-                            _pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.ease);
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          child: Icon(Icons.chevron_right),
-                        )
-                      ],
-                    ),
-                  ),
-                );
+                print(position);
+                return ContentPageA(pageController: this.pageController, pagesColor: this.pagesColor, position: position,);
               },
             ),
          );
